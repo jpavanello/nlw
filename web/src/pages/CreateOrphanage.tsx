@@ -65,10 +65,24 @@ export default function CreateOrphanage() {
       data.append('images', image);
     })
 
-    await api.post('orphanages', data);
+    await api.post('/orphanages', data).then(response => {
 
-    alert("Cadastro realizado com sucesso!");
-    history.push('/app');
+      alert("Cadastro realizado com sucesso!");
+      history.push('/app');
+      
+    }).catch(error => {
+      const dataError =  error.response.data;
+      console.log(dataError);
+
+      let txterrors = dataError.message;
+      for(let [key, value] of Object.entries(dataError.errors)){
+        txterrors += `\n ${key}: ${value}`;
+      }
+
+      alert(txterrors);
+    });
+
+    
   }
 
   return (
